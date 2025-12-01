@@ -11,45 +11,36 @@ public class Day1Part2 {
 
         try (Scanner reader = new Scanner(inputFile)) {
             while (reader.hasNext()) {
-                System.out.println("Dial position: " + dialPosition);
-                int countBefore = count;
+
                 String line = reader.nextLine();
-                System.out.println("Instruction: " + line);
                 Character direction = line.charAt(0);
                 int step = Integer.parseInt(line.substring(1));
-                
-                count += step / 100;
 
-                if (direction.equals('L')) {
-                    step *= -1;
+                int modifier;
+                if (direction == 'L') {
+                    modifier = -1;
+                } else {
+                    modifier = 1;
                 }
-                
-                int newDialPosition = dialPosition + step;
 
-                if (step % 100 != 0) {
-                    if (Math.abs(newDialPosition % 100) != newDialPosition && dialPosition != 0) {
-                        count++;
-                    } else if (newDialPosition == 0) {
+                for (int i = 0; i < step; i++) {
+                    dialPosition += modifier;
+                    if (dialPosition < 0) {
+                        dialPosition += 100;
+                    } else if (dialPosition >= 100) {
+                        dialPosition -= 100;
+                    }
+                    if (dialPosition == 0) {
                         count++;
                     }
                 }
-
-                while (newDialPosition < 0) {
-                    newDialPosition += 100;
-                }
-
-                dialPosition = newDialPosition % 100;
                 
-                System.out.println("Passed zero " + (count - countBefore) + " times");
-                System.out.println("Dial position: " + dialPosition);
-                System.out.println();
-
             }
+            
+            System.out.println(count);
 
         } catch (FileNotFoundException e) {
-            System.out.println(e.getStackTrace());
+            System.out.println("Input file not found");
         }
-
-        System.out.println(count);
     }
 }
