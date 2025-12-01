@@ -11,32 +11,38 @@ public class Day1Part2 {
 
         try (Scanner reader = new Scanner(inputFile)) {
             while (reader.hasNext()) {
+                System.out.println("Dial position: " + dialPosition);
+                int countBefore = count;
                 String line = reader.nextLine();
+                System.out.println("Instruction: " + line);
                 Character direction = line.charAt(0);
                 int step = Integer.parseInt(line.substring(1));
                 
-                count += Math.abs(step / 100);
-
-                int previousDialPosition = dialPosition;
+                count += step / 100;
 
                 if (direction.equals('L')) {
                     step *= -1;
                 }
                 
-                if (dialPosition % 100 != dialPosition) {
-                    count++;
+                int newDialPosition = dialPosition + step;
+
+                if (step % 100 != 0) {
+                    if (Math.abs(newDialPosition % 100) != newDialPosition && dialPosition != 0) {
+                        count++;
+                    } else if (newDialPosition == 0) {
+                        count++;
+                    }
                 }
 
-                dialPosition += step;
-                dialPosition %= 100;
-
-                if ((previousDialPosition < 0 && dialPosition > 0) || (previousDialPosition > 0 && dialPosition < 0)) {
-                    count++;
+                while (newDialPosition < 0) {
+                    newDialPosition += 100;
                 }
 
-                if (dialPosition == 0) {
-                    count++;
-                }
+                dialPosition = newDialPosition % 100;
+                
+                System.out.println("Passed zero " + (count - countBefore) + " times");
+                System.out.println("Dial position: " + dialPosition);
+                System.out.println();
 
             }
 
